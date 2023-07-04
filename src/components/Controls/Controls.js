@@ -4,28 +4,25 @@ import Button from '../Button';
 
 import styles from './Controls.module.css';
 
+import { toastListContext } from '../ToastListProvider';
+
 function Controls({ options, toastList, setToastList }) {
 	const [message, setMessage] = React.useState('');
 	const [variant, setVariant] = React.useState('notice');
+	const { createToast } = React.useContext(toastListContext);
 
-	function handleSubmit() {
-		const newToast = {
-			message,
-			variant,
-			id: crypto.randomUUID(),
-		};
-		const nextToastList = [...toastList, newToast];
-		setToastList(nextToastList);
+	function handleSubmit(event) {
+		event.preventDefault();
+		createToast(message, variant);
 		setMessage('');
-		setVariant('notice');
+		setVariant(options[0]);
 	}
 
 	return (
 		<div className={styles.controlsWrapper}>
 			<form
 				onSubmit={(event) => {
-					event.preventDefault();
-					handleSubmit();
+					handleSubmit(event);
 				}}
 			>
 				<div className={styles.row}>

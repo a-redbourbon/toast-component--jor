@@ -3,24 +3,22 @@ import React from 'react';
 import Toast from '../Toast';
 import styles from './ToastShelf.module.css';
 
-function ToastShelf({ toastList, setToastList }) {
-	function handleDismiss(id) {
-		const nextToastList = toastList.filter((toastItem) => {
-			return toastItem.id !== id;
-		});
-		setToastList(nextToastList);
-	}
+import { toastListContext } from '../ToastListProvider/ToastListProvider';
+
+function ToastShelf() {
+	const { toastList } = React.useContext(toastListContext);
 
 	return (
-		<ol className={styles.wrapper}>
+		<ol
+			className={styles.wrapper}
+			role='region'
+			aria-live='polite'
+			aria-label='Notification'
+		>
 			{toastList.map((toastItem, index) => {
 				return (
 					<li className={styles.toastWrapper} key={toastItem.id}>
-						<Toast
-							variant={toastItem.variant}
-							id={toastItem.id}
-							handleDismiss={handleDismiss}
-						>
+						<Toast variant={toastItem.variant} id={toastItem.id}>
 							{toastItem.message}
 						</Toast>
 					</li>
